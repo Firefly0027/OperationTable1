@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using App.DAL.DataContext;
 using App.DAL.Models;
 using Microsoft.AspNetCore.Authorization;
+using DAL.Contracts;
 
 namespace OperationTable.Controllers
 {
@@ -12,51 +13,29 @@ namespace OperationTable.Controllers
     [Authorize]
     public class CategoryController : ControllerBase
     {
-        private readonly OperationDbContext _categoriesDbContext;
+        private IGenericRepository<categoryModel> _Repository;
 
-        public CategoryController(OperationDbContext categoriesDbContext)
+        public CategoryController(IGenericRepository<categoryModel> repository)
         {
-            _categoriesDbContext = categoriesDbContext;
+            _Repository = repository;
         }
 
         [HttpGet]
-        [ActionName("GetAllCategories")]
-        public async Task<IActionResult> GetAllCategories()
-        {
-            try
-            {
-                var Categories = await _categoriesDbContext.category.ToListAsync();
-                return Ok(Categories);
+        [ActionName("GetCategory")]
 
-            }
-            catch ( Exception ex)
-            {
-                Logger.Log(ex.Message);
-                throw;
-            }
-            
+        public async Task<IActionResult> GetCategory()
+        {
+            var result = await _Repository.GetAll();
+            return Ok(result);
         }
 
         [HttpPost]
-        [ActionName("AddCategories")]
+        [ActionName("AddCategory")]
 
-        public async Task<IActionResult> AddCategories([FromBody] categoryModel categoriesRequest)
+        public async Task<IActionResult> AddCategory(categoryModel category)
         {
-            try
-            {
-                await _categoriesDbContext.category.AddAsync(categoriesRequest);
-                await _categoriesDbContext.SaveChangesAsync();
-                object x = null;
-                string e = (int.Parse(x.ToString())).ToString() + "ddddddddddd";
-                return Ok(categoriesRequest); ;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log(ex.Message);
-                return BadRequest(ex);
-
-            }
-          
+            await _Repository.Add(category);
+            return Ok();
         }
     }
-}
+    }

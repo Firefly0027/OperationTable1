@@ -9,6 +9,9 @@ using Microsoft.IdentityModel.Tokens;
 using OperationTable.Repository;
 using App.DAL.Models;
 using Microsoft.OpenApi.Models;
+using BLL.Services;
+using DAL.Contracts;
+using Microsoft.VisualBasic.ApplicationServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +38,11 @@ builder.Services.AddAuthentication(x =>
 });
 
 builder.Services.AddScoped<IJWTManagerRepository<usersModel>, JWTManagerRepository>();
+builder.Services.AddScoped<IGenericRepository<itemsTableModel>, ItemService>();
+builder.Services.AddScoped<IGenericRepository<categoryModel>, CategoryService>();
+builder.Services.AddScoped<IGenericRepository<OrderDetialsModel>, OrderDetialsService>();
+builder.Services.AddScoped<IGenericRepository<OrderTableModel>, OrderHeaderService>();
+builder.Services.AddScoped<IGenericRepository<usersModel>, UserService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

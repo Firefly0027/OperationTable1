@@ -1,5 +1,4 @@
 ﻿using App.DAL.Models;
-using Microsoft.VisualBasic.ApplicationServices;
 using OperationTable.Models;
 
 namespace OperationTable.Repository;

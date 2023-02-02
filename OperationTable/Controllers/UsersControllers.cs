@@ -5,29 +5,23 @@ using App.DAL.DataContext;
 using App.DAL.Models;
 using OperationTable.Repository;
 using Microsoft.AspNetCore.Authorization;
+using DAL.Contracts;
+using Microsoft.VisualBasic.ApplicationServices;
 
 namespace OperationTable.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
     public class UsersControllers : ControllerBase
     {
         private readonly OperationDbContext _usersDbContext;
         private readonly IJWTManagerRepository<usersModel> _repository;
+        private readonly IGenericRepository<User> _repositoryy;
 
         public UsersControllers(OperationDbContext usersANDordersDbContext , IJWTManagerRepository<usersModel> repository)
         {
             _usersDbContext = usersANDordersDbContext;
             _repository = repository;
-        }
-
-        [HttpGet]
-         public async Task<IActionResult> GetUser()
-        {
-            var result = await _usersDbContext.Users.ToListAsync();
-            Logger.Log("authorized to fetch the user Emails and Passwords");
-            return Ok(result);
         }
 
         [AllowAnonymous]
@@ -44,41 +38,15 @@ namespace OperationTable.Controllers
             }
             Logger.Log("User logging in");
             return Ok(Token);
-            //if (users == null)
-            //{
-            //    return BadRequest();
-            //}
-
-            //var user = await _usersDbContext.Users
-            //    .FirstOrDefaultAsync(x => x.Email == users.Email && x.Password == users.Password);
-            //if (user == null)
-            //    return NotFound(new { Message = "User Not Found" });
-
-            //return Ok
-            //    (  
-            //   user
-            //    );
+        
         }
         [HttpPost]
         [ActionName("Register")]
 
-        public async Task<IActionResult> Register([FromBody] usersModel users)
+        public async Task<IActionResult> Register(User user)
         {
-            if (users == null)
-            {
-                return BadRequest();
-            }
-
-            var user = _usersDbContext.Users.Where(e => e.Email == users.Email).FirstOrDefault();
-            if (user != null)
-            {
-                return BadRequest("Email Already Exists!");
-            }
-
-            await _usersDbContext.Users.AddAsync(users);
-            await _usersDbContext.SaveChangesAsync();
-            return Ok
-                (new { Message = " Registeration Success!" });
+            var result = await _repositoryy.Update(user);
+            return Ok(result);
         }
     }
 }
