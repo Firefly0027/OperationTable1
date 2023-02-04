@@ -26,5 +26,7 @@ public class itemsTableModel
 
     public int categoryid { get; set; }
 
-    public categoryModel category { get; set; }
+    public string? categoryName { get; set; }
+
+    public categoryModel? category { get; set; }
 }

@@ -16,7 +16,7 @@ namespace OperationTable.Controllers
     {
         private readonly OperationDbContext _usersDbContext;
         private readonly IJWTManagerRepository<usersModel> _repository;
-        private readonly IGenericRepository<User> _repositoryy;
+        private readonly IGenericRepository<usersModel> _repositoryy;
 
         public UsersControllers(OperationDbContext usersANDordersDbContext , IJWTManagerRepository<usersModel> repository)
         {
@@ -36,16 +36,15 @@ namespace OperationTable.Controllers
             {
                 return Unauthorized();
             }
-            Logger.Log("User logging in");
             return Ok(Token);
         
         }
         [HttpPost]
         [ActionName("Register")]
 
-        public async Task<IActionResult> Register(User user)
+        public async Task<IActionResult> Register(usersModel user)
         {
-            var result = await _repositoryy.Update(user);
+            var result = await _repositoryy.Add(user);
             return Ok(result);
         }
     }

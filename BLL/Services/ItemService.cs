@@ -3,6 +3,7 @@ using DAL.Contracts;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using OperationTable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,8 +59,9 @@ public class ItemService : IGenericRepository<itemsTableModel>
                 return true;
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Logger.Log(ex.Message);
             throw;
         }
     }
@@ -73,7 +75,8 @@ public class ItemService : IGenericRepository<itemsTableModel>
     {
         try
         {
-            var sql = "select * from Items";
+            var sql = @"SELECT o.*, i.categoryName FROM Items o 
+                      JOIN category i ON o.categoryid = i.categoryID";
             using (var connection = new SqlConnection(_configuration.GetConnectionString("sqlServerConnStrr")))
             {
                 connection.Open();
@@ -81,8 +84,9 @@ public class ItemService : IGenericRepository<itemsTableModel>
                 return result.ToList();
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Logger.Log(ex.Message);
             throw;
         }
     }
@@ -104,8 +108,9 @@ public class ItemService : IGenericRepository<itemsTableModel>
                 return result;
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Logger.Log(ex.Message);
             throw;
         }
     }
@@ -122,21 +127,30 @@ public class ItemService : IGenericRepository<itemsTableModel>
                 return true;
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Logger.Log(ex.Message);
             throw;
         }
     }
 
     public async Task<bool> Update(itemsTableModel entity)
     {
-        var paramList = new
+        try
         {
-            Company = entity.company, Availability = entity.availability , Price = entity.price , Discount = entity.discount,
-            Tax = entity.tax , Description = entity.description , Categoryid = entity.categoryid , ItemID = entity.ItemID
-        };
+            var paramList = new
+            {
+                Company = entity.company,
+                Availability = entity.availability,
+                Price = entity.price,
+                Discount = entity.discount,
+                Tax = entity.tax,
+                Description = entity.description,
+                Categoryid = entity.categoryid,
+                ItemID = entity.ItemID
+            };
 
-       string sql = @"UPDATE [dbo].[Items]
+            string sql = @"UPDATE [dbo].[Items]
        SET
        [company] = @Company
       ,[availability] = @Availability
@@ -148,11 +162,18 @@ public class ItemService : IGenericRepository<itemsTableModel>
        WHERE
        [ItemID] = @ItemID";
 
-        using (var connection = new SqlConnection(_configuration.GetConnectionString("sqlServerConnStrr")))
-        {
-            connection.Open();
-            await connection.ExecuteAsync(sql, paramList);
-            return true;
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("sqlServerConnStrr")))
+            {
+                connection.Open();
+                await connection.ExecuteAsync(sql, paramList);
+                return true;
+            }
         }
+        catch (Exception ex)
+        {
+            Logger.Log(ex.Message);
+            throw;
+        }
+        
     }
 }

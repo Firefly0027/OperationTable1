@@ -4,6 +4,7 @@ using DAL.Contracts;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using OperationTable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,57 +25,7 @@ public class UserService : IGenericRepository<usersModel>
         _context = context;
     }
 
-    public Task<bool> Add(usersModel entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<IEnumerable<usersModel>> AddUser(usersModel users)
-    {
-        try
-        {
-           
-            var paramList = new { Email = users.Email, Password = users.Password };
-
-            string sql = @"SELECT * FROM Users WHERE Email = @Email AND Password = @Password";
-
-          await using (var connection = new SqlConnection(_configuration.GetConnectionString("sqlServerConnStrr")))
-            {
-                connection.Open();
-                var user = connection.Query<usersModel>(sql, paramList);
-                return user.ToList();
-            }
-            
-        }
-        catch (SqlException ex)
-        {
-            Console.WriteLine("An error occurred: " + ex.Message);
-            throw;
-
-        }
-    }
-
-    public Task<IEnumerable<usersModel>> GetAll()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<usersModel>> GetAllById(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<usersModel?> GetById(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Remove(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<bool> Update(usersModel users)
+    public async Task<bool> Add(usersModel users)
     {
         try
         {
@@ -105,9 +56,60 @@ public class UserService : IGenericRepository<usersModel>
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Logger.Log(ex.Message);
             throw;
         }
+    }
+
+    public async Task<IEnumerable<usersModel>> AddUser(usersModel users)
+    {
+        try
+        {
+           
+            var paramList = new { Email = users.Email, Password = users.Password };
+
+            string sql = @"SELECT * FROM Users WHERE Email = @Email AND Password = @Password";
+
+          await using (var connection = new SqlConnection(_configuration.GetConnectionString("sqlServerConnStrr")))
+            {
+                connection.Open();
+                var user = connection.Query<usersModel>(sql, paramList);
+                return user.ToList();
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            Logger.Log(ex.Message);
+            throw;
+
+        }
+    }
+
+    public Task<IEnumerable<usersModel>> GetAll()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<usersModel>> GetAllById(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<usersModel?> GetById(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Remove(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Update(usersModel users)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -14,5 +14,5 @@ public class categoryModel
 
     public string categoryName { get; set; }
 
-    public ICollection<itemsTableModel> items { get; set; }
+    public ICollection<itemsTableModel>? items { get; set; }
 }

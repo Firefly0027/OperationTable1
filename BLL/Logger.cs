@@ -1,6 +1,4 @@
-﻿using System.Windows.Forms;
-
-namespace OperationTable;
+﻿namespace OperationTable;
 
 public static class Logger
 {

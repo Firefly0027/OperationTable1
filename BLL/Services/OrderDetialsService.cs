@@ -3,6 +3,7 @@ using DAL.Contracts;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using OperationTable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +52,8 @@ public class OrderDetialsService : IGenericRepository<OrderDetialsModel>
         }
         catch (Exception ex)
         {
-            string v = ex.InnerException.Message;
+            Logger.Log(ex.Message);
+            throw;
         }
         return null;
     }

@@ -16,7 +16,7 @@ public class usersModel
 
     public string Password { get; set; }
 
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 
-    public ICollection<OrderTableModel> orders { get; set; }
+    public ICollection<OrderTableModel>? orders { get; set; }
 }

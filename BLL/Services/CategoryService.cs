@@ -41,6 +41,7 @@ public class CategoryService : IGenericRepository<categoryModel>
                 connection.Open();
                 var result = await connection.ExecuteAsync(sql, ParamList);
                 return true;
+               
             }
         }
         catch (Exception ex)

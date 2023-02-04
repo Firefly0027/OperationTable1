@@ -3,6 +3,7 @@ using DAL.Contracts;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using OperationTable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,8 +93,9 @@ public class OrderHeaderService : IGenericRepository<OrderTableModel>
             }
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            Logger.Log(ex.Message);
             throw;
         }
     }
@@ -120,8 +122,9 @@ public class OrderHeaderService : IGenericRepository<OrderTableModel>
                 return result;
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Logger.Log(ex.Message);
             throw;
         }
     }
@@ -144,8 +147,9 @@ public class OrderHeaderService : IGenericRepository<OrderTableModel>
                 return true;
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Logger.Log(ex.Message);
             throw;
         }
     }
